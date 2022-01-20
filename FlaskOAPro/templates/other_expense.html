@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-考勤审批
+{% endblock %}
+
+{% block content %}
+    {% if exp_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>报销人</th>
+                    <th>报销主题</th>
+                    <th>报销内容</th>
+                    <th>报销金额</th>
+                    <th>申请时间</th>
+                    <th>报销申请单</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exp in exp_list %}
+                    <tr>
+                        <td>{{ exp.e_person.nick_name }}</td>
+                        <td>{{ exp.title }}</td>
+                        <td>{{ exp.reason }}</td>
+                        <td>{{ exp.amount }}</td>
+                        <td>{{ exp.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+<!--                        <td><a type="file"><img src="/static/{{ exp.file }}"></a></td>-->
+                        <td>
+                            {% if exp.file %}
+                                {% if exp.file|last == "g" %}
+                                <img src="/static/{{ exp.file }}"  style="width: 28px;">
+                                {% else %}
+                                <a href="/static/{{ exp.file }}/">{{ exp.file|replace('files/','') }}</a>
+                                {% endif %}
+                            {% else %}
+                                <p></p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if exp.a_status == "申请中" %}
+                            <a href="/accept_exp/t/{{ exp.id }}/" class="btn btn-warning">通过</a>
+                            <a href="/accept_exp/b/{{ exp.id }}/" class="btn btn-danger">驳回</a>
+                            {% else %}
+                            {{ exp.a_status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    {% endif %}
+<script>
+    window.onload=function() {
+        hoverOpenImg();
+};
+
+    function hoverOpenImg() {
+            var img_show = null; // tips提示
+            $('td img').hover(function () {
+            console.log("aaa");
+                var kd = $(this).width();
+                kd1 = kd * 20;          //图片放大倍数
+                kd2 = kd * 20 + 30;       //图片放大倍数
+                var img = "<img class='img_msg' src='" + $(this).attr('src') + "' style='width:" + kd1 + "px;' />";
+                img_show = layer.tips(img, this, {
+                    tips: [2, 'rgba(41,41,41,.5)']
+                    , area: [kd2 + 'px']
+                    , time: 15000
+                });
+                return false;
+            }, function () {
+                layer.close(img_show);
+            });
+            $('td img').attr('style', 'width:40px;display:block!important');
+        }
+</script>
+{% endblock%}

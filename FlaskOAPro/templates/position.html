@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-{{ depart.d_name }}-职位管理
+{% endblock %}
+
+
+{% block label %}
+    {{ depart.d_name }}-职位管理
+    <!--触发部分-->
+    <button class="btn btn-primary pull-right" data-target="#position_modal" data-toggle="modal">
+        添加职位
+    </button>
+{% endblock %}
+
+{% block content %}
+    <!--职位展示部分-->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>职位名称</th>
+                <th>职位等级</th>
+                <th>职位描述</th>
+                <th>职位操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for position in position_list %}
+            <tr>
+                <td>{{ position.p_name }}</td>
+                <td>{{ position.p_level }}</td>
+                <td>{{ position.p_description }}</td>
+                <td>
+                    <a class="btn btn-success">修改职位</a>
+                    <a class="btn btn-danger">删除职位</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!--面板部分-->
+    <div class="modal" id="position_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">职位注册表单</div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form method="post" class="form form-horizontal">
+                            <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">
+                            <div class="form-group">
+                                <label class="control-label">职位名称:</label>
+                                <input class="form-control" type="text" name="p_name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">职位描述:</label>
+                                <textarea class="form-control" name="p_description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">职位等级:</label>
+                                <input class="form-control" type="number" name="p_level">
+                            </div>
+                            <div class="form-group">
+                                <input class="btn btn-primary pull-right" type="submit" value="注册职位">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

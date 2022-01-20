@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-我的已办
+{% endblock %}
+
+{% block content %}
+    <div>
+        {% for message in get_flashed_messages() %}
+            <div class="btn btn-lg btn-success btn-block">{{ message }}</div>
+        {% endfor %}
+    <!--切换面板-->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#apply" aria-controls="apply" role="tab" data-toggle="tab">日程安排</a>
+            </li>
+            <li role="presentation">
+                <a href="#recode" aria-controls="recode" role="tab" data-toggle="tab">我的待办</a>
+            </li>
+        </ul>
+        <!--内容面板-->
+        <div class="tab-content container-fluid">
+            <div id="apply" role="tabpanel" class="tab-pane fade in active">
+                <form class="form form-horizontal" method="post">
+                    <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">
+                    <div class="form-group">
+                        <label class="control-label">日程内容</label>
+                        <input class="form-control" name="title" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">重要程度</label>
+                        <label class="form-control">
+                            <input type="radio" name="degree" value="正常" checked> 正常
+                            <input type="radio" name="degree" value="重要"> 重要
+                            <input type="radio" name="degree" value="绝密"> 绝密</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">办理人</label>
+                        <select class="form-control" name="person">
+                            {% for a in person_list %}
+                            <option value="{{ a.nick_name }}">{{ a.nick_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">起始时间*</label>
+                        <input class="form-control" type="text" name="start_time" autocomplete="off" id="start" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                        <script src="/static/laydate/laydate.js"></script> <!-- 改成你的路径 -->
+                        <script>
+                        //直接嵌套显示
+                        laydate.render({
+                          elem: '#start'
+                          ,type: 'datetime'
+                          ,min: '09:00:00'
+                        });
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">截至时间*</label>
+                        <input class="form-control" type="text" name="end_time" autocomplete="off" id="end" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                        <script>
+                        //直接嵌套显示
+                        laydate.render({
+                          elem: '#end'
+                          ,type: 'datetime'
+                          ,min: '18:00:00'
+                        });
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">备注</label>
+                        <textarea class="form-control" name="reason"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary pull-right" type="submit" value="发起申请">
+                    </div>
+                </form>
+            </div>
+            <div id="recode" role="tabpanel" class="tab-pane fade">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>日程编号</th>
+                            <th>日程内容</th>
+                            <th>重要程度</th>
+                            <th>起始时间</th>
+                            <th>结束时间</th>
+                            <th>状态</th>
+                            <th>创建人</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in handler_list %}
+                        <tr>
+                            <td>{{ a.id }}</td>
+                            <td>{{ a.title }}</td>
+                            <td>{{ a.degree }}</td>
+                            <td>{{ a.start_time }}</td>
+                            <td>{{ a.end_time }}</td>
+                            <td>{{ a.a_status }}</td>
+                            <td>{{ a.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                            <td>{{ a.reason }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

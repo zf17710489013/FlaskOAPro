@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ per.p_name }}权限职位关联页面
+{% endblock %}
+
+
+{% block label %}
+    {{ per.p_name }} 权限
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>选择</th>
+                    <th>职位编号</th>
+                    <th>职位名称</th>
+                    <th>职位部门</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pos in pos_list %}
+                    <tr>
+                        <td>
+                            {% if pos.id in our_pos_id %}
+                                <input checked type="checkbox" name="pos_id" value="{{ pos.id }}">
+                            {% else %}
+                                <input type="checkbox" name="pos_id" value="{{ pos.id }}">
+                            {% endif %}
+                        </td>
+                        <td>{{ pos.id }}</td>
+                        <td>{{ pos.p_name }}</td>
+                        <td>{{ pos.p_department.d_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input class="pull-right btn btn-success" type="submit" value="绑定职位">
+    </form>
+
+{% endblock %}

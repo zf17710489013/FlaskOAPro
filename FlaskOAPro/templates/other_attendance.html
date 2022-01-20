@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-考勤审批
+{% endblock %}
+
+{% block content %}
+    {% if att_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>请假人</th>
+                    <th>假期类型</th>
+                    <th>假期长度（天）</th>
+                    <th>起始时间</th>
+                    <th>结束时间</th>
+                    <th>请假原因</th>
+                    <th>申请时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for att in att_list %}
+                    <tr>
+                        <td>{{ att.a_person.nick_name }}</td>
+                        <td>{{ att.a_type }}</td>
+                        <td>{{ att.a_date }}</td>
+                        <td>{{ att.start_time }}</td>
+                        <td>{{ att.end_time }}</td>
+                        <td>{{ att.reason }}</td>
+                        <td>{{ att.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                        <td>
+                            {% if att.a_status == "申请中" %}
+                            <a href="/accept/t/{{ att.id }}/" class="btn btn-warning">通过</a>
+                            <a href="/accept/b/{{ att.id }}/" class="btn btn-danger">驳回</a>
+                            {% else %}
+                            {{ att.a_status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    {% endif %}
+{% endblock%}

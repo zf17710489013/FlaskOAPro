@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-我的会议
+{% endblock %}
+
+{% block content %}
+    <div>
+    <!--切换面板-->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#apply" aria-controls="apply" role="tab" data-toggle="tab">我的会议</a>
+            </li>
+        </ul>
+        <!--内容面板-->
+        <div class="tab-content container-fluid">
+            <div id="apply" role="tabpanel" class="tab-pane fade in active">
+                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>会议主题</th>
+                            <th>会议室</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+<!--                            <th>会议状态</th>-->
+                            <th>参会人员</th>
+                            <th>备注</th>
+<!--                            <th>会议纪要</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in meet_list %}
+                        <tr>
+                            <td>{{ a.title }}</td>
+                            <td>{{ a.room }}</td>
+                            <td>{{ a.start_time }}</td>
+                            <td>{{ a.end_time }}</td>
+                            <td>{{ a.persons }}</td>
+                            <td>{{ a.reason }}</td>
+<!--                            <td>-->
+<!--                                {% if a.examine %}-->
+<!--                                    {{ a.examine }}-->
+<!--                                {% else %}-->
+<!--                                    {{ a.a_status }}-->
+<!--                                {% endif %}-->
+<!--                            </td>-->
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

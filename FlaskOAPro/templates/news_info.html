@@ -1,0 +1,77 @@
+{% extends  "base.html" %}
+
+{% block title %}
+    矢隆OA-{{ article.title }}
+{% endblock %}
+
+{% block style %}
+    <style>
+        .news_pic{
+            width: 50px;
+        }
+    </style>
+    <script src="/static/ckeditor/ckeditor.js"></script>
+{% endblock %}
+
+{% block label %}
+    {{ article.title }}
+    {% if page_process().news %}
+    <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#news_panel">修改新闻</button>
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+    <!--新闻内容展示-->
+    <div class="row">
+        <h3 class="pull-left">
+            发布时间 ：{{ article.public_time }}
+        </h3>
+        <h3 class="pull-right">
+            文章作者 ： {{ article.author }}
+        </h3>
+    </div>
+    <div class="row">
+        {{ article.content|safe }}
+    </div>
+    <div class="row">
+         <img src="/static/{{ article.picture }}">
+    </div>
+    <!--模态框-->
+    <div class="modal" id="news_panel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">添加新闻</div>
+            <form method="post" class="form form-horizontal" enctype="multipart/form-data">
+                <div class="modal-body" style="overflow: hidden">
+                    <div class="col-md-12">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label class="control-label">新闻标题:</label>
+                            <input class="form-control" type="text" name="title" value="{{ article.title }}" placeholder="新闻标题">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">作者:</label>
+                            <input class="form-control" type="text" name="author" value="{{ article.author }}" placeholder="作者">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">新闻内容:</label>
+                            <textarea class="ckeditor" name="content">{{ article.content }}
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">文章图片:</label>
+                            <input class="form-control" type="file" name="picture">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-primary" type="submit" value="保存新闻">
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

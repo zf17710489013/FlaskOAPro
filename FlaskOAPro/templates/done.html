@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-我的已办
+{% endblock %}
+
+{% block content %}
+    <div>
+    <!--切换面板-->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#apply" aria-controls="apply" role="tab" data-toggle="tab">我的已办</a>
+            </li>
+        </ul>
+        <!--内容面板-->
+        <div class="tab-content container-fluid">
+            <div id="apply" role="tabpanel" class="tab-pane fade in active">
+                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>日程编号</th>
+                            <th>日程内容</th>
+                            <th>重要程度</th>
+                            <th>起始时间</th>
+                            <th>结束时间</th>
+                            <th>状态</th>
+                            <th>完成时间</th>
+                            <th>创建人</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in handler_list %}
+                        <tr>
+                            <td>{{ a.id }}</td>
+                            <td>{{ a.title }}</td>
+                            <td>{{ a.degree }}</td>
+                            <td>{{ a.start_time }}</td>
+                            <td>{{ a.end_time }}</td>
+                            <td>已完成</td>
+                            <td>{{ a.examine_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                            <td>{{ a.h_person.nick_name }}</td>
+                            <td>{{ a.reason }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

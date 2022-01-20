@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-权限管理
+{% endblock %}
+{% block style%}
+    <style>
+        .clear {
+            clear: both;
+        }
+    </style>
+{% endblock %}
+{% block label %}
+    <!--触发部分-->
+    <button class="btn btn-primary pull-right" data-target="#person_modal" data-toggle="modal">
+        添加权限
+    </button>
+    <div class="clear"></div>
+{% endblock %}
+
+{% block content %}
+     <!--职员展示部分-->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>权限名称</th>
+                <th>权限描述</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for per in per_list %}
+                <tr>
+                    <td>{{ per.p_name }}</td>
+                    <td>{{ per.p_description }}</td>
+                    <td>
+                        <a href="/per_position/{{ per.id }}/" class="btn btn-success">关联职位</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <ul class="pagination pull-right">
+
+    </ul>
+     <!--面板部分-->
+     <div class="modal" id="person_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">添加权限表单</div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form method="post" class="form form-horizontal">
+                            <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">
+                            <div class="form-group">
+                                <label class="control-label">权限名成:</label>
+                                <input class="form-control" type="text" name="p_name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">权限描述:</label>
+                                <textarea class="form-control" name="p_description"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="btn btn-primary pull-right" type="submit" value="添加权限">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

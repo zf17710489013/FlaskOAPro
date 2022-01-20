@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-员工管理
+{% endblock %}
+{% block style%}
+    <style>
+        .clear {
+            clear: both;
+        }
+    </style>
+{% endblock %}
+{% block label %}
+    <!--触发部分-->
+    {% if page_process().person %}
+    <button class="btn btn-primary pull-right" data-target="#person_modal" data-toggle="modal">
+        添加职员
+    </button>
+    {% endif %}
+    <div class="clear"></div>
+{% endblock %}
+
+{% block content %}
+     <!--职员展示部分-->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>职员id</th>
+                <th>职员姓名</th>
+                <th>职员联系方式</th>
+                <th>职员邮箱</th>
+                <th>职员特长</th>
+                <th>职员部门</th>
+<!--                <th>职员职位</th>-->
+                {% if page_process().person %}
+                <th>操作</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for p in persion_list.items %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>{{ p.nick_name }}</td>
+                    <td>{{ p.phone }}</td>
+                    <td>{{ p.email }}</td>
+                    <td>{{ p.skill }}</td>
+                    <td>{{ p.p_position.p_department.d_name }}</td>
+<!--                    <td>{{ p.p_position.p_name }}</td>-->
+                    {% if page_process().person %}
+                    <td>
+                        <button class="btn btn-info">移除职员</button>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <ul class="pagination pull-right">
+        {%for p in page_range %}
+            <li><a href="/person/{{p}}/">{{ p }}</a></li>
+        {% endfor %}
+    </ul>
+     <!--面板部分-->
+     <div class="modal" id="person_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">职位注册表单</div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form method="post" class="form form-horizontal">
+                            <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">
+                            <div class="form-group">
+                                <label class="control-label">用户名:</label>
+                                <input class="form-control" type="text" name="username">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">密码:</label>
+                                <input class="form-control" type="password" name="password">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">姓名:</label>
+                                <input class="form-control" type="text" name="nick_name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">职位:</label>
+                                <select class="form-control" name="position">
+                                    {% for p in positions %}
+                                    <option value="{{p.id}}">{{ p.p_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input class="btn btn-primary pull-right" type="submit" value="添加职员">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

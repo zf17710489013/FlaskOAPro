@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-公章审批
+{% endblock %}
+
+{% block content %}
+    {% if seal_list %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>申请人</th>
+                    <th>用章原因</th>
+                    <th>公章类型</th>
+                    <th>申请时间</th>
+                    <th>附件</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for seal in seal_list %}
+                    <tr>
+                        <td>{{ seal.s_person.nick_name }}</td>
+                        <td>{{ seal.reason }}</td>
+                        <td>{{ seal.a_type }}</td>
+                        <td>{{ seal.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                        <td>
+                            {% if seal.file %}
+                                {% if seal.file|last == "g" %}
+                                <img src="/static/{{ seal.file }}"  style="width: 28px;">
+                                {% else %}
+                                <a href="/static/{{ seal.file }}/">{{ seal.file|replace('files/','') }}</a>
+                                {% endif %}
+                            {% else %}
+                                <p></p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if seal.a_status == "申请中" %}
+                            <a href="/accept_seal/t/{{ seal.id }}/" class="btn btn-warning">通过</a>
+                            <a href="/accept_seal/b/{{ seal.id }}/" class="btn btn-danger">驳回</a>
+                            {% else %}
+                            {{ seal.a_status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    {% endif %}
+<script>
+    window.onload=function() {
+        hoverOpenImg();
+};
+
+    function hoverOpenImg() {
+            var img_show = null; // tips提示
+            $('td img').hover(function () {
+            console.log("aaa");
+                var kd = $(this).width();
+                kd1 = kd * 20;          //图片放大倍数
+                kd2 = kd * 20 + 30;       //图片放大倍数
+                var img = "<img class='img_msg' src='" + $(this).attr('src') + "' style='width:" + kd1 + "px;' />";
+                img_show = layer.tips(img, this, {
+                    tips: [2, 'rgba(41,41,41,.5)']
+                    , area: [kd2 + 'px']
+                    , time: 15000
+                });
+                return false;
+            }, function () {
+                layer.close(img_show);
+            });
+            $('td img').attr('style', 'width:40px;display:block!important');
+        }
+</script>
+{% endblock%}

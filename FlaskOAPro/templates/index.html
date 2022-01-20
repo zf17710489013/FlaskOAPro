@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-首页
+{% endblock %}
+
+{% block content %}
+    <div id="main" style="width: 1600px; height: 400px"></div>
+    <div class="row container-fluid">
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    我的待办
+<!--                    <a class="pull-right" href="#" style="color: white">我的已办>>></a>-->
+                </div>
+                <div class="panel-body">
+                    {% if page_process().other_attendance %}
+                        {% for t in work_tables %}
+                            <div class="row container-fluid">
+                                <p class="pull-left">
+                                    <a href="/other_attendance/">{{ t.reason }}</a>
+                                </p>
+    <!--                            <p class="pull-left">-->
+    <!--                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+    <!--                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请假审批-->
+    <!--                            </p>-->
+                                <p class="pull-right">{{ t.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                            </div>
+                        {% endfor %}
+                        {% for e in exp_tables %}
+                            <div class="row container-fluid">
+                                <p class="pull-left">
+                                    <a href="/other_expense/">{{ e.reason }}</a>
+                                </p>
+    <!--                            <p class="pull-left">-->
+    <!--                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+    <!--                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;费用报销-->
+    <!--                            </p>-->
+                                <p class="pull-right">{{ e.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                            </div>
+                        {% endfor %}
+                        {% for s in seal_tables %}
+                            <div class="row container-fluid">
+                                <p class="pull-left">
+                                    <a href="/other_seal/">{{ s.reason }}</a>
+                                </p>
+    <!--                            <p class="pull-left">-->
+    <!--                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+    <!--                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公章审批-->
+    <!--                            </p>-->
+                                <p class="pull-right">{{ s.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    公司新闻
+                    <a class="pull-right" href="news" style="color: white">查看更多>>></a>
+                </div>
+                <div class="panel-body">
+                    {% for n in news %}
+                        <div class="row container-fluid">
+                            <p class="pull-left">
+                                <a href="/news_info/{{ n.id }}/">{{ n.title }}</a>
+                            </p>
+                            <p class="pull-right">{{ n.public_time }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="/static/js/echarts.min.js"></script>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var option = {
+            title: {
+                text: '公司各部门职员人数统计'
+            },
+            tooltip: {},
+            legend: {
+                data:['职员人数']
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: '职员人数',
+                type: 'line', //柱状图
+                data: []
+            }]
+        };
+        // myChart.setOption(option);
+        $.ajax(
+            {
+                url:"/kpi/", //ajax请求的地址
+                type:"get", //请求类型
+                data: "", //请求携带的数据
+                success: function (data) {
+                    var result = data["department_list"]; //后台视图发送的数据
+                    var x_data = [];
+                    var y_data = [];
+                    for(var i in result){
+                        y_data.push(result[i]["count"]);
+                        x_data.push(result[i]["department_name"]);
+                    }
+                    option["xAxis"]["data"] = x_data;
+                    option["series"][0]["data"] = y_data;
+                    myChart.setOption(option)
+                }, //请求成功执行的函数，成功的结果会以参数的形式传入这个函数
+                error: function (error) {
+                    console.log(error)
+                }//请求失败执行的函数，失败的结果会以参数的形式传入这个函数
+            }
+        );
+
+    </script>
+{% endblock %}

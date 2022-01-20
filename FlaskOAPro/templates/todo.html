@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-我的待办
+{% endblock %}
+
+{% block content %}
+    <div>
+    <!--切换面板-->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#apply" aria-controls="apply" role="tab" data-toggle="tab">我的待办</a>
+            </li>
+        </ul>
+        <!--内容面板-->
+        <div class="tab-content container-fluid">
+            <div id="apply" role="tabpanel" class="tab-pane fade in active">
+                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>日程编号</th>
+                            <th>日程内容</th>
+                            <th>重要程度</th>
+                            <th>起始时间</th>
+                            <th>结束时间</th>
+                            <th>状态</th>
+                            <th>创建人</th>
+                            <th>备注</th>
+                            <th>提交</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in handler_list %}
+                        <tr>
+                            <td>{{ a.id }}</td>
+                            <td>{{ a.title }}</td>
+                            <td>{{ a.degree }}</td>
+                            <td>{{ a.start_time }}</td>
+                            <td>{{ a.end_time }}</td>
+                            <td><select id="pid" onchange="gradeChange()">
+                                <option value="处理中">处理中</option>
+                                <option value="已完成">已完成</option>
+                                    </select></td>
+                            <td>{{ a.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                            <td>{{ a.reason }}</td>
+                            <td><a class="btn btn-danger" href="/update_todo/{{ a.id }}/">提交</a></td>
+<!--                            <td><form method="post">-->
+<!--                                <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">-->
+<!--                                <div class="form-group">-->
+<!--                        <input type="submit" value="提交"></div></form></td>-->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

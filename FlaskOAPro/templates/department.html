@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-部门管理
+{% endblock %}
+
+{% block style %}
+    <style>
+        .register{
+            overflow: hidden;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="register col-md-12">
+        <form method="post" class="form form-horizontal">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label class="control-label">部门名称</label>
+                <input class="form-control" type="text" name="d_name">
+            </div>
+            <div class="form-group">
+                <label class="control-label">部门描述</label>
+                <textarea class="form-control" name="d_des"></textarea>
+            </div>
+            <div>
+                <input class="btn btn-primary pull-right" type="submit" value="注册部门">
+            </div>
+        </form>
+    </div>
+    <div class="department col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>部门名称</th>
+                    <th>部门描述</th>
+                    <th>部门操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for depart in depart_list %}
+                    <tr>
+                        <td>{{ depart.d_name }}</td>
+                        <td>{{ depart.d_description }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="/update_department/{{ depart.id }}/">修改部门</a>
+                            <a class="btn btn-info" href="/position/{{ depart.id }}/">查看职位</a>
+                            <a class="btn btn-danger" href="/del_department/{{ depart.id }}/">删除部门</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

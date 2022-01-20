@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+    报销申请
+{% endblock %}
+
+{% block content %}
+    <div>
+        {% for message in get_flashed_messages() %}
+            <div class="btn btn-lg btn-success btn-block">{{ message }}</div>
+        {% endfor %}
+    <!--切换面板-->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#apply" aria-controls="apply" role="tab" data-toggle="tab">报销申请</a>
+            </li>
+            <li role="presentation">
+                <a href="#recode" aria-controls="recode" role="tab" data-toggle="tab">报销记录</a>
+            </li>
+        </ul>
+        <!--内容面板-->
+        <div class="tab-content container-fluid">
+            <div id="apply" role="tabpanel" class="tab-pane fade in active">
+                <form class="form form-horizontal" method="post" enctype="multipart/form-data">
+                    <div class="modal-body" style="overflow: hidden">
+                        <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">
+                        <div class="form-group">
+                            <label class="control-label">报销主题</label>
+                            <input class="form-control" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">报销内容</label>
+                            <select class="form-control" name="reason">
+                                <option value="个人费用报销">个人费用报销</option>
+                                <option value="公司费用报销">公司费用报销</option>
+                                <option value="差旅费用报销">差旅费用报销</option>
+                                <option value="车辆费用报销">车辆费用报销</option>
+                                <option value="医疗费用报销">医疗费用报销</option>
+                                <option value="业务费用报销">业务费用报销</option>
+                            </select>
+                    </div>
+                        <div class="form-group">
+                            <label class="control-label">报销金额 (单位:元)</label>
+                            <input class="form-control" name="amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">添加附件:</label>
+                            <input class="form-control" type="file" name="file" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-primary" type="submit" value="确认申请">
+                    </div>
+
+                </form>
+            </div>
+            <div id="recode" role="tabpanel" class="tab-pane fade">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>报销编号</th>
+                            <th>报销主题</th>
+                            <th>报销类型</th>
+                            <th>报销金额</th>
+                            <th>审核状态</th>
+                            <th>申请时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in expense_list %}
+                        <tr>
+                            <td>{{ a.id }}</td>
+                            <td>{{ a.title }}</td>
+                            <td>{{ a.reason }}</td>
+                            <td>{{ a.amount }}</td>
+                            <td>{{ a.a_status }}</td>
+                            <td>{{ a.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+<!--                            <td>-->
+<!--                                {% if a.examine %}-->
+<!--                                    {{ a.examine }}-->
+<!--                                {% else %}-->
+<!--                                    {{ a.a_status }}-->
+<!--                                {% endif %}-->
+<!--                            </td>-->
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

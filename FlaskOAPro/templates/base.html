@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="/static/vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    {% block style %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">矢隆OA系统</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li>欢迎登陆：{{ page_process().name }}</li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="/myself/"><i class="fa fa-user fa-fw"></i> 个人中心</a>
+                        </li>
+                        <li><a href="/setpassword/"><i class="fa fa-gear fa-fw"></i> 密码修改</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="/logout/"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href="/"><i class="fa fa-dashboard fa-fw"></i> 首页</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-flask fa-fw"></i> 考勤管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/attendance/">请假申请</a>
+                                </li>
+                                {%if page_process().other_attendance %}
+                                <li>
+                                    <a href="/other_attendance/">请假审批</a>
+                                </li>
+                                {% endif %}
+                                {% if page_process().department %}
+                                <li>
+                                    <a href="/record/">打卡记录</a>
+                                </li>
+                                {% endif %}
+                                {% if page_process().records %}
+                                <li>
+                                    <a href="/records/">请假记录</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-square fa-fw"></i> 费用报销<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/expense/">报销申请</a>
+                                </li>
+                                {%if page_process().other_attendance %}
+                                <li>
+                                    <a href="/other_expense/">报销审批</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/news/"><i class="fa fa-edit fa-fw"></i> 新闻管理</a>
+                        </li>
+                        <li>
+                            <a href="/doc/"><i class="fa fa-magic fa-fw"></i> 合同文档</a>
+                        </li>
+                        <li>
+<!--                            <a href="/seal/"><i class="fa fa-table fa-fw"></i> 公章申请</a>-->
+<!--                        </li>-->
+                        <li>
+                            <a href="#"><i class="fa fa-table fa-fw"></i> 用印管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/seal/">用印申请</a>
+                                </li>
+                                {%if page_process().other_attendance %}
+                                <li>
+                                    <a href="/other_seal/">用印审批</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 人事管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                {% if page_process().department %}
+                                <li>
+                                    <a href="/department/">部门管理</a>
+                                </li>
+                                {% endif %}
+                                <li>
+                                    <a href="/person/1/">职员管理</a>
+                                </li>
+
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        {% if page_process().permission %}
+                            <li>
+                                <a href="/permission/"><i class="fa fa-sitemap fa-fw"></i> 权限管理</a>
+                            </li>
+                        {% endif %}
+<!--                        <li>-->
+<!--                            <a href="#"><i class="fa fa-strikethrough fa-fw"></i> 项目审批<span class="fa arrow"></span></a>-->
+<!--                            <ul class="nav nav-second-level">-->
+<!--                                <li>-->
+<!--                                    <a href="/establish/">商务立项</a>-->
+<!--                                </li>-->
+<!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <a href="/contract/">合同审批</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+<!--                                <li>-->
+<!--                                    <a href="/affairs/">技术立项</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+                        <li>
+                            <a href="#"><i class="fa fa-underline fa-fw"></i> 工作流程<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/handle/">日程安排</a>
+                                </li>
+                                <li>
+                                    <a href="/todo/">我的待办</a>
+                                </li>
+                                <li>
+                                    <a href="/done/">我的已办</a>
+                                </li>
+                                <li>
+                                    <a href="/setup/">我创建的</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-truck fa-fw"></i> 会议管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/schedule/">我的会议</a>
+                                </li>
+                                <li>
+                                    <a href="/meeting/">会议安排</a>
+                                </li>
+<!--                                {%if page_process().other_attendance %}-->
+<!--                                <li>-->
+<!--                                    <a href="/mine/">会议室管理</a>-->
+<!--                                </li>-->
+<!--                                {% endif %}-->
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        {% block label %}
+                        {% endblock %}
+                    </h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="container-fluid">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+
+    <script src="/static/layer/layer.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="/static/vendor/raphael/raphael.min.js"></script>
+    <script src="/static/vendor/morrisjs/morris.min.js"></script>
+    <script src="/static/data/morris-data.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/dist/js/sb-admin-2.js"></script>
+    {% block script %}
+    {% endblock %}
+</body>
+
+</html>

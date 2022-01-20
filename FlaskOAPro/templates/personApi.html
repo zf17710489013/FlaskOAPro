@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div>
+                <a class="navbar-brand" href="#">
+                    全文检索
+                </a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="#">登陆</a>
+                    </li>
+                    <li>
+                        <a class="#">个人中心</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+         <div class="input-group">
+            <input class="form-control" type="text" aria-describedby="hello">
+            <span class="input-group-btn" id="hi">
+                <button class="btn btn-primary">
+                    检索
+                </button>
+            </span>
+        </div>
+    </div>
+    <div id="content" class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>员工id</th>
+                    <th>员工姓名</th>
+                    <th>员工用户名</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="i in person_list">
+                    <td>{[ i.id ]}</td>
+                    <td>{[ i.username ]}</td>
+                    <td>{[ i.nick_name ]}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function getData(obj){
+            $.ajax({
+                url:"/api/person/",
+                type:"get",
+                data:"",
+                success: function (data) {
+                    obj.person_list = data;
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        }
+
+        var vue = new Vue({
+            el: "#content",
+            data: {
+                person_list: []
+            },
+            created: function () {
+                getData(this)
+            },
+            methods: {
+                
+            },
+            delimiters:['{[', ']}']
+        })
+    </script>
+</body>
+</html>

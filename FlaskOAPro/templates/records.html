@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+    矢隆OA-打卡记录
+{% endblock %}
+
+{% block content %}
+    <div>
+    <!--切换面板-->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#apply" aria-controls="apply" role="tab" data-toggle="tab">请假记录</a>
+            </li>
+        </ul>
+        <!--内容面板-->
+        <div class="tab-content container-fluid">
+            <div id="apply" role="tabpanel" class="tab-pane fade in active">
+                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>员工姓名</th>
+                            <th>请假类型</th>
+                            <th>请假原因</th>
+                            <th>起始时间</th>
+                            <th>结束时间</th>
+                            <th>假条状态</th>
+                            <th>申请时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in attendance_list %}
+                        <tr>
+                            <td>{{ a.a_person.nick_name }}</td>
+                            <td>{{ a.a_type }}</td>
+                            <td>{{ a.reason }}</td>
+                            <td>{{ a.start_time }}</td>
+                            <td>{{ a.end_time }}</td>
+                            <td class="btn btn-danger">{{ a.a_status }}</td>
+                            <td>{{ a.apply_time.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
